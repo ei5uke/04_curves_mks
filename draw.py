@@ -1,18 +1,51 @@
 from display import *
 from matrix import *
+import math
+
+def add_circle( points, cx, cy, cz, r, step ):
+    t = 0
+    while t < 1:
+        x = r * math.cos(t * 2 * math.pi) + cx
+        y = r * math.sin(t * 2 * math.pi) + cy
+        z = cz
+        x2 = r * math.cos((t + step) * 2 * math.pi) + cx
+        y2 = r * math.sin((t + step) * 2 * math.pi) + cy
+        z2 = cz
+        add_edge(points,x,y,z,x2,y2,z2)
+        t += step
+
+def add_curve( points, x0, y0, x1, y1, x2, y2, x3, y3, step, curve_type ):
+    x = [[x0, x1, x2, x3]]
+    y = [[y0, y1, y2, y3]]
+    if curve_type == "hermite":
+        mult = make_hermite()
+    else:
+        mult = make_bezier()
+    matrix_mult(mult, x)
+    matrix_mult(mult, y)
+    for i in range(int(1 / step)):
+        t = i * step
+        t2 = (i + 1) * step
+        x0 = x[0][0] * t ** 3 + x[0][1] * t ** 2 + x[0][2] * t + x[0][3]
+        y0 = y[0][0] * t ** 3 + y[0][1] * t ** 2 + y[0][2] * t + y[0][3]
+        x1 = 0
+        y1 = x[0][0] * t2 ** 3 + x[0][1] * t2 ** 2 + x[0][2] * t2 + x[0][3]
+        x2 = y[0][0] * t2 ** 3 + y[0][1] * t2 ** 2 + y[0][2] * t2 + y[0][3]
+        y2 = 0
+        add_edge(points, x0, y0, x1, y1, x2, y2)
 
 
 def draw_lines( matrix, screen, color ):
     if len(matrix) < 2:
         print('Need at least 2 points to draw')
         return
-    
+
     point = 0
     while point < len(matrix) - 1:
-        draw_line( matrix[point][0],
-                   matrix[point][1],
-                   matrix[point+1][0],
-                   matrix[point+1][1],
+        draw_line( int(matrix[point][0]),
+                   int(matrix[point][1]),
+                   int(matrix[point+1][0]),
+                   int(matrix[point+1][1]),
                    screen, color)    
         point+= 2
         
@@ -23,6 +56,9 @@ def add_edge( matrix, x0, y0, z0, x1, y1, z1 ):
 def add_point( matrix, x, y, z=0 ):
     matrix.append( [x, y, z, 1] )
     
+
+
+
 def draw_line( x0, y0, x1, y1, screen, color ):
 
     #swap points if going right -> left

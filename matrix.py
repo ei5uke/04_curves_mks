@@ -9,6 +9,38 @@ z0  z1  ... zn
 """
 import math
 
+def make_bezier():
+    t = new_matrix()
+    t[0][0] = -1
+    t[1][0] = 3
+    t[2][0] = -3
+    t[3][0] = 1
+    t[0][1] = 3
+    t[1][1] = -6
+    t[2][1] = 3
+    t[0][2] = -3
+    t[1][2] = 3
+    t[0][3] = 1
+    return t
+
+def make_hermite():
+    t = new_matrix()
+    t[0][0] = 2
+    t[1][0] = -2
+    t[2][0] = 1
+    t[3][0] = 1
+    t[0][1] = -3
+    t[1][1] = 3
+    t[2][1] = -2
+    t[3][1] = -1
+    t[2][2] = 1
+    t[0][3] = 1
+    return t
+
+def generate_curve_coefs( p0, p1, p2, p3, t ):
+    pass
+
+
 def make_translate( x, y, z ):
     t = new_matrix()
     ident(t)
@@ -16,44 +48,41 @@ def make_translate( x, y, z ):
     t[3][1] = y
     t[3][2] = z
     return t
-    
+
 def make_scale( x, y, z ):
-    s = new_matrix()
-    ident(s)
-    s[0][0] = x
-    s[1][1] = y
-    s[2][2] = z
-    return s
+    t = new_matrix()
+    ident(t)
+    t[0][0] = x
+    t[1][1] = y
+    t[2][2] = z
+    return t
 
 def make_rotX( theta ):
-    theta = math.radians(theta)
-    x = new_matrix()
-    ident(x)
-    x[1][1] = math.cos(theta)
-    x[1][2] = math.sin(theta)
-    x[2][1] = -1 * math.sin(theta)
-    x[2][2] = math.cos(theta)
-    return x
+    t = new_matrix()
+    ident(t)
+    t[1][1] = math.cos(theta)
+    t[2][1] = -1 * math.sin(theta)
+    t[1][2] = math.sin(theta)
+    t[2][2] = math.cos(theta)
+    return t
 
 def make_rotY( theta ):
-    theta = math.radians(theta)
-    y = new_matrix()
-    ident(y)
-    y[0][0] = math.cos(theta)
-    y[0][2] = -1 * math.sin(theta)
-    y[2][0] = math.sin(theta)
-    y[2][2] = math.cos(theta)
-    return y
+    t = new_matrix()
+    ident(t)
+    t[0][0] = math.cos(theta)
+    t[0][2] = -1 * math.sin(theta)
+    t[2][0] = math.sin(theta)
+    t[2][2] = math.cos(theta)
+    return t
 
 def make_rotZ( theta ):
-    theta = math.radians(theta)
-    z = new_matrix()
-    ident(z)
-    z[0][0] = math.cos(theta)
-    z[0][1] = math.sin(theta)
-    z[1][0] = -1 * math.sin(theta)
-    z[1][1] = math.cos(theta)
-    return z
+    t = new_matrix()
+    ident(t)
+    t[0][0] = math.cos(theta)
+    t[1][0] = -1 * math.sin(theta)
+    t[0][1] = math.sin(theta)
+    t[1][1] = math.cos(theta)
+    return t
 
 #print the matrix such that it looks like
 #the template in the top comment
